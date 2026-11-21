@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch } from "vue";
+import { ref, watch, computed } from "vue";
 ///////////////////////////////////
 const bookForm = ref(null);
 
@@ -47,6 +47,23 @@ watch(
 const delBook = (id) => {
   books.value = books.value.filter((book) => book.id !== id);
 };
+
+///// searching books //////
+const searchQ = ref("");
+
+const searchBooks = computed(() => {
+  const typedBook = searchQ.value.toLocaleLowerCase().trim();
+  return books.value.filter(
+    (book) =>
+      book.title.toLocaleLowerCase().includes(typedBook) ||
+      book.author.toLocaleLowerCase().includes(typedBook),
+  );
+});
+const showAll = ref(false);
+
+const visibleBooks = computed(() => {
+  return showAll.value ? searchBooks.value : searchBooks.value.slice(0, 8);
+});
 </script>
 
 <template>
@@ -54,7 +71,11 @@ const delBook = (id) => {
     <section class="display-container">
       <h1>Book Tracker</h1>
       <div class="search-bar">
-        <input type="text" placeholder="Search for a book..." />
+        <input
+          v-model="searchQ"
+          type="text"
+          placeholder="Search for a book..."
+        />
         <span class="search-icon">
           <svg viewBox="0 0 24 24" fill="none">
             <circle cx="10" cy="10" r="6" />
@@ -66,9 +87,15 @@ const delBook = (id) => {
         <h2>My Books</h2>
         <button class="add" @click="openForm">+</button>
       </div>
-
+      <p class="empty" v-if="searchBooks.length === 0">
+        {{
+          books.length === 0
+            ? "No books yet. Press + to add one."
+            : "No books match your search."
+        }}
+      </p>
       <div class="book-list">
-        <div class="book" v-for="book in books" :key="book.id">
+        <div class="book" v-for="book in visibleBooks" :key="book.id">
           <div class="cover-container">
             <img :src="book.cover" alt="Book Cover" />
           </div>
@@ -90,6 +117,11 @@ const delBook = (id) => {
             </button>
           </div>
         </div>
+      </div>
+      <div class="more-wrap" v-if="searchBooks.length > 8">
+        <button class="more" @click="showAll = !showAll">
+          {{ showAll ? "Show less" : "Show more" }}
+        </button>
       </div>
     </section>
   </main>
