@@ -11,7 +11,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "electron": "concurrently \"vite\" \"wait-on http://localhost:5173 && electron .\"",
-    "release": "vite build && electron-builder"
+    "release": "vite build && electron-builder --publish never"
   },
   "build": {
     "appId": "com.booktracker.app",

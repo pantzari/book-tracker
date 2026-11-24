@@ -419,3 +419,47 @@ dialog {
     transform: translateY(0);
   }
 }
+
+@media (max-width: 600px) {
+  main {
+    padding: 12px;
+
+    .display-container {
+      min-height: calc(100vh - 24px);
+      padding: 24px 16px;
+      border-radius: 22px;
+
+      h1 {
+        margin: 0 0 22px;
+      }
+
+      .search-bar {
+        width: 100%;
+
+        input {
+          width: 100%;
+          padding-right: 48px;
+        }
+      }
+
+      .book-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px 12px;
+
+        .book {
+          width: 100%;
+          min-width: 0;
+          padding: 8px;
+
+          .cover-container img {
+            height: 130px;
+          }
+
+          .info-wrapper .title {
+            font-size: 0.95rem;
+          }
+        }
+      }
+    }
+  }
+}
